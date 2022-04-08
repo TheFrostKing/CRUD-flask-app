@@ -3,6 +3,7 @@ from email.mime import application
 from flask import Flask, render_template, request, redirect, url_for
 from flask_sqlalchemy import SQLAlchemy
 from models import db, Application_Error
+from datetime import datetime
  
 
 # create an instance of the flask app
@@ -26,12 +27,14 @@ def create():
     if request.method == 'POST':
         level = request.form['level']
         date_time = request.form['date_time']
+        datetime_object = datetime.strptime(date_time, "%d/%m/%Y")
+        print(f" MALE {datetime_object}")
         source = request.form['source']
         event_id = request.form['event_id']
-        application_log = Application_Error(level=level, date=date_time, source=source, event_id=event_id)
+        application_log = Application_Error(level=level, date_time=datetime_object, source=source, event_id=event_id)
         db.session.add(application_log)
         db.session.commit()
-        return redirect(url_for('data'))
+        return redirect('/data')
     
     
 
