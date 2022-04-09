@@ -28,7 +28,6 @@ def create():
         level = request.form['level']
         date_time = request.form['date_time']
         datetime_object = datetime.strptime(date_time, "%d/%m/%Y")
-        print(f" MALE {datetime_object}")
         source = request.form['source']
         event_id = request.form['event_id']
         application_log = Application_Error(level=level, date_time=datetime_object, source=source, event_id=event_id)
@@ -45,12 +44,12 @@ def RetrieveList():
     return render_template('datalist.html',application_logs = application_logs)
 
 
-# @app.route('/data/<str:id>') # SOLO SEARCH
-# def RetrieveLog(id):
-#     application_log = Application_Error.query.filter_by(level=id).first()
-#     if application_log:
-#         return render_template('data.html', employee = application_log)
-#     return f"Employee with id ={id} Doesn't exist"
+@app.route('/data/<int:event_id>') # SOLO SEARCH
+def RetrieveLog(event_id):
+    application_log = Application_Error.query.filter_by(event_id=event_id).first()
+    if application_log:
+        return render_template('data.html', application_log = application_log)
+    return f"error with id ={event_id} Doesn't exist"
  
 
 # @app.route('/data/<string:level>/update',methods = ['GET','POST'])
