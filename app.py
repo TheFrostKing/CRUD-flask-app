@@ -18,7 +18,7 @@ db.init_app(app)
 def create_table():
     db.create_all()
 
-
+''' FORM TO CREATE NEW DATA '''
 @app.route('/data/create' , methods = ['GET','POST'])
 def create():
     if request.method == 'GET':
@@ -34,15 +34,16 @@ def create():
         db.session.add(application_log)
         db.session.commit()
         return redirect('/data')
-    
-    
 
+''' display data '''
 
 @app.route('/data')
 def RetrieveList():
     application_logs = Application_Error.query.all()
     return render_template('datalist.html',application_logs = application_logs)
 
+
+''' SEARCH SINGLE ELEMENT'''
 
 @app.route('/data/<int:event_id>') # SOLO SEARCH
 def RetrieveLog(event_id):
@@ -52,26 +53,33 @@ def RetrieveLog(event_id):
     return f"error with id ={event_id} Doesn't exist"
  
 
-# @app.route('/data/<string:level>/update',methods = ['GET','POST'])
-# def update(id):
-#     application_log = Application_Error.query.filter_by(level=id).first()
-#     if request.method == 'POST':
-#         if application_log:
-#             db.session.delete(application_log)
-#             db.session.commit()
+
+''' UPDATE EXISTING DATA'''
+
+@app.route('/data/<int:event_id>/update',methods = ['GET','POST'])
+def update(event_id):
+    application_log = Application_Error.query.filter_by(event_id=event_id).first()
+    if request.method == 'POST':
+        if application_log:
+            db.session.delete(application_log)
+            db.session.commit()
  
-#             level = request.form['level']
-#             date_time = request.form['date_time']
-#             source = request.form['source']
-#             event_id = request.form['event_id']
-#             application_log = Application_Error(level=level, date=date_time, source=source, event_id = event_id)
+            level = request.form['level']
+            date_time = request.form['date_time']
+            datetime_object = datetime.strptime(date_time, "%d/%m/%Y")
+            source = request.form['source']
+            event_id = request.form['event_id']
+            application_log = Application_Error(level=level, date=datetime_object, source=source, event_id = event_id)
  
-#             db.session.add(application_log)
-#             db.session.commit()
-#             return redirect(f'/data/{id}')
-#         return f"Employee with id = {id} Does not exist"
+            db.session.add(application_log)
+            db.session.commit()
+            return redirect(f'/data/{event_id}')
+        return f"error with id ={event_id} Doesn't exist"
  
-#     return render_template('update.html', application_log = application_log)
+    return render_template('update.html', application_log = application_log)
+
+
+
 
  
 app.run(host='localhost', port=5000)
