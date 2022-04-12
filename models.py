@@ -1,10 +1,9 @@
-from imp import source_from_cache
 from flask_sqlalchemy import SQLAlchemy
-from datetime import date, datetime
+from datetime import datetime
  
 db = SQLAlchemy()
 
-class Application_Error(db.Model):
+class Events_model(db.Model):
     __tablename__ = 'event_errors'
 
     id = db.Column(db.Integer, primary_key=True)
