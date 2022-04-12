@@ -1,5 +1,30 @@
-{% for application_log in application_logs %}
-<h3>{{application_log}}</h3><hr>
-{% endfor %}
+<!DOCTYPE html>
+<html>
+<head>
+    <p><a href="data/create"> Add Error </a></p>
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/styles.css')}}">
+</head>
+<table class="content-table">
+        <thead>
+        <tr>
+            <th>LEVEL</th>                                   
+            <th>DATE</th>
+            <th>sourc</th>
+            <th>event</th>
+        </tr>
+        </thead>
+    {% for application_log in application_logs %}
+        <tbody>
+        <tr>
+            <td>{{application_log.level}}</td>
+            <td>{{application_log.date_time}}</td>
+            <td>{{application_log.source}}</td>
+            <td>{{application_log.event_id}}</td>
+        </tr>
+        </tbody>
+    {% endfor %}
+</table>
+</html>
 
+  
 

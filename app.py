@@ -27,7 +27,7 @@ def create():
     if request.method == 'POST':
         level = request.form['level']
         date_time = request.form['date_time']
-        datetime_object = datetime.strptime(date_time, "%d/%m/%Y")
+        datetime_object = datetime.strptime(date_time, "%d/%m/%Y %H:%M:%S")
         source = request.form['source']
         event_id = request.form['event_id']
         application_log = Application_Error(level=level, date_time=datetime_object, source=source, event_id=event_id)
@@ -66,7 +66,7 @@ def update(event_id):
  
             level = request.form['level']
             date_time = request.form['date_time']
-            datetime_object = datetime.strptime(date_time, "%d/%m/%Y")
+            datetime_object = datetime.strptime(date_time, "%d/%m/%Y %H:%M:%S")
             source = request.form['source']
             event_id = request.form['event_id']
             application_log = Application_Error(level=level, date=datetime_object, source=source, event_id = event_id)
