@@ -1,19 +1,39 @@
 # Windows Event Log Viewer
-
 import datetime
 import win32evtlog # requires pywin32 pre-installed
 import win32con
+import sqlite3
 
 
-def print_events(event):
-    print ('Source Name:', event.SourceName)
-    print ('Time Generated:', event.TimeGenerated)
-    print ('Event Category:', event.EventCategory)
-    print ('Event Type:', evt_type)
-    print('reserverd flags', event.ReservedFlags)
-    print('event id', event.EventID)
+file = "db.sqlite"
+
+try:
+    conn = sqlite3.connect(file)
+    print("Database file connected")
+except:
+    print("Database failed to connect")
+
+c = conn.cursor()
+
+
+# def print_events(event):
+#     print ('Source Name:', event.SourceName)
+#     print ('Time Generated:', event.TimeGenerated)
+#     print ('Event Category:', event.EventCategory)
+#     print ('Event Type:', evt_type)
+#     print('reserverd flags', event.ReservedFlags)
+#     print('event id', event.EventID)
     
-    print("end \n")
+#     print("end \n")
+
+
+def insert_data(event):
+    c.execute(f'''INSERT INTO event_errors (level, date_time, source, event_id)
+                VALUES ('{evt_type}', '{event.TimeGenerated}', '{event.SourceName}', '{event.EventID}' )''')
+    conn.commit()   
+    print("executing query")
+    
+
 
 evt_dict={win32con.EVENTLOG_AUDIT_FAILURE:'EVENTLOG_AUDIT_FAILURE',  # storing all levels of errors and problems
             win32con.EVENTLOG_AUDIT_SUCCESS:'EVENTLOG_AUDIT_SUCCESS',
@@ -30,7 +50,7 @@ datetime_back = datetime.datetime.now() - datetime.timedelta(hours=number_of_hou
 
 while True:
     server = 'localhost' # name of the target computer to get event logs
-    log_types = ["System", "Application", "Security"]
+    log_types = ["Application"]
     for log_type in log_types:
         handle = win32evtlog.OpenEventLog(server,log_type)
         flags = win32evtlog.EVENTLOG_BACKWARDS_READ|win32evtlog.EVENTLOG_SEQUENTIAL_READ
@@ -47,11 +67,11 @@ while True:
                         count_logs += 1
                         evt_type = str(evt_dict[event.EventType])
 
-                        gathered_events.append(event)
+                        insert_data(event)
                     
                         
                 if event.TimeGenerated < datetime_back:
-                    print('log type: ' +'total: ',log_type ,count_logs)
+                    print('log type: ' + 'total: ',log_type ,count_logs)
                     break
 
     if log_type == log_types[len(log_types)-1]:
