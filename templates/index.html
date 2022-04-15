@@ -1,12 +1,41 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>CRUD</title>
-</head>
-<body>
-    This is our Manager for Event logs on the Active Directory
-</body>
-</html>
+{% extends "base.html" %}
+{% block title %}Index{% endblock %}
+
+{% block content %}
+<div class="container">
+    <h2> This is our Manager for Event logs on the Active Directory</h2>
+</div>
+
+<div class = "container">
+      <table class="table table-dark">
+        <thead>
+          <tr>
+            <th scope="col">ID</th>
+            <th scope="col">Level</th>
+            <th scope="col">Date</th>
+            <th scope="col">Source</th>
+            <th scope="col">Event ID</th>
+            <th scope="col">Delete</th>
+          </tr>
+        </thead>
+        <tbody>
+            {% for application_log in application_logs %}
+        <a href="#">
+
+        
+          <tr>
+            <th scope="row">{{application_log.id}}</th>
+            <td><a href='https://127.0.0.1:5000/data/{{application_log.id}}/update'>{{application_log.level}}</a></td>
+            <td>{{application_log.date_time}}</td>
+            <td>{{application_log.source}}</td>
+            <td>{{application_log.event_id}}</td>
+            <td><button href='https://127.0.0.1:5000/data/{{application_log.id}}/delete' type="button" class="btn btn-danger">Delete</button></a></td>
+          </tr>
+        </a>
+          {% endfor %}
+        </tbody>
+      </table>
+</div>>
+{% endblock %}
+
+

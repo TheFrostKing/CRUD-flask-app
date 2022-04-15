@@ -1,10 +1,53 @@
-<form action='' method = "POST">
-    <p>level <input type = "text" name = "level" value="{{application_log.level}}"/></p>
-    <p>date <input type = "datetime" name = "date_time"  value="{{application_log.date_time}}"/></p>
-    <p>source <input type = "text" name = "source" value="{{application_log.source}}"/></p>
-    <p>event_id <input type = "integer" name = "event_id" value="{{application_log.event_id}}"/></p>
-    <p><input type = "submit" value = "Submit" /></p>
-  </form>
+{% extends "base.html" %}
+{% block title %}Index{% endblock %}
 
+{% block content %}
+<div class="container">
+    <h2> This is our Manager for Event logs on the Active Directory</h2>
+</div>
 
+<div class = "container">
+  <!-- <form action="" method="POST" > -->
+    <form name="Item_1" action="data/{{application_log.id}}/update" method="POST"></form>
+    <div class="mb-3">
+      <label for="exampleInputEmail1" class="form-label">Level</label>
+      <select class="form-select" aria-label="Default select example">
+        <option selected>Open this select menu</option>
+        <option type = "text" value="1">Information</option>
+        <option value="2">Warning</option>
+        <option value="3">Critical</option>
+      </select>
+      <div id="emailHelp" class="form-text">We'll never share your email with anyone else.</div>
+    </div>
+
+    <div class="mb-3">
+      <label for="exampleInputPassword1" class="form-label">Date time</label>
+      <input type="datetime-local" id="meeting-time"
+       name="meeting-time"
+       min="2018-06-07T00:00" max="2028-06-14T00:00"
+       class="form-control" id="exampleInputPassword1">
+    </div>
   
+    <div class="mb-3">
+      <label for="exampleInputEmail1" class="form-label">Source</label>
+      <select class="form-select" aria-label="Default select example">
+        <option selected>{{application_log.source}}</option>
+        <option value="1">Security</option>
+        <option value="2">Application</option>
+        <option value="3">Audit</option>
+      </select>
+      <div id="source" class="form-text">We'll never share your email with anyone else.</div>
+    </div>
+
+    <div class="mb-3">
+      <!-- <input type="checkbox" class="form-check-input" id="exampleCheck1"> -->
+      <label for="event_id" class="form-label">Event id</label>
+      <input type="number" id="event_id" name="event_id"
+       min="0" max="1000000">
+      
+    </div>
+
+    <button type="submit" class="btn btn-primary">Submit</button>
+  </form>
+</div>
+{% endblock %}

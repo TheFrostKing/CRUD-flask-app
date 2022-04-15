@@ -1,6 +1,10 @@
+from distutils.log import debug
+from email.mime import application
 from flask import Flask, render_template, request, redirect, url_for
+import flask
 from models import db, Events_model
 from datetime import datetime
+from markupsafe import escape
  
 
 # create an instance of the flask app
@@ -33,55 +37,57 @@ def create():
         return redirect('/data')
 
 
-''' display data '''
-@app.route('/data')
-def RetrieveList():
-    application_logs = Events_model.query.all()
-    return render_template('datalist.html',application_logs = application_logs)
-
 
 ''' SEARCH SINGLE ELEMENT'''
 
-@app.route('/data/<int:event_id>') # SOLO SEARCH
-def RetrieveLog(event_id):
-    application_log = Events_model.query.filter_by(event_id=event_id).first()
+@app.route('/data/<int:id>') # SOLO SEARCH
+def RetrieveLog(id):
+    application_log = Events_model.query.filter_by(id=id).first()
     if application_log:
         return render_template('data.html', application_log = application_log)
-    return f"error with id ={event_id} Doesn't exist"
+    return f"error with id ={id} Doesn't exist"
  
 
 
 ''' UPDATE EXISTING DATA'''
 
-@app.route('/data/<int:event_id>/update',methods = ['GET','POST'])
-def update(event_id):
-    application_log = Events_model.query.filter_by(event_id=event_id).first()
+@app.route('/data/<int:id>/update',methods = ['GET','POST'])
+def update(id):
+    application_log = Events_model.query.filter_by(id=id).first()
+    print(application_log)
     if request.method == 'POST':
         if application_log:
-            db.session.delete(application_log)
-            db.session.commit()
- 
-            level = request.form['level']
+            application_log.level = request.form['level']
             date_time = request.form['date_time']
-            datetime_object = datetime.strptime(date_time, "%d/%m/%Y %H:%M:%S")
-            source = request.form['source']
-            event_id = request.form['event_id']
-            application_log = Events_model(level=level, date=datetime_object, source=source, event_id = event_id)
- 
+            application_log.date_time = datetime.strptime(date_time, "%d/%m/%Y %H:%M:%S")
+            application_log.source = request.form['source']
+            application_log.event_id = request.form['event_id']
+
             db.session.add(application_log)
             db.session.commit()
-            return redirect(f'/data/{event_id}')
-        return f"error with id ={event_id} Doesn't exist"
+            return redirect(f'/data/{id}')
+        return f"error with id ={id} Doesn't exist"
  
     return render_template('update.html', application_log = application_log)
 
 
+@app.route('/data/<int:id>/delete', methods=['GET','POST'])
+def delete(id):
+    application_log = Events_model.query.filter_by(id=id).first()
+    if request.method == 'POST':
+        if application_log:
+            db.session.delete(application_log)
+            db.session.commit()
+            return redirect('/')
+
+
 @app.route('/')
 def home():
-    return render_template('index.html')
+    application_logs = Events_model.query.all()
+    return render_template('index.html', application_logs=application_logs)
 
 
  
  
 # app.run(host="0.0.0.0", port=5000)
-app.run(ssl_context=('self_signed/cert.pem', 'self_signed/key.pem'), host ="0.0.0.0", port=5000)
+app.run(ssl_context=('self_signed/cert.pem', 'self_signed/key.pem'), host ="0.0.0.0", port=5000, debug = True)

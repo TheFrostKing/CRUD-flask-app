@@ -20,4 +20,4 @@ class Events_model(db.Model):
  
 
     def __repr__(self):
-        return f"{self.level}:{self.date_time}:{self.source}:{self.event_id}"
+        return f"{self.id}:{self.level}:{self.date_time}:{self.source}:{self.event_id}"

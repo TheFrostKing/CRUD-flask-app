@@ -8,7 +8,8 @@
 <table class="content-table">
         <thead>
         <tr>
-            <th>LEVEL</th>                                   
+            <th>ID</th>   
+            <th>Level</th>                                   
             <th>DATE</th>
             <th>sourc</th>
             <th>event</th>
@@ -17,6 +18,7 @@
     {% for application_log in application_logs %}
         <tbody>
         <tr>
+            <td>{{application_log.id}}</td>
             <td>{{application_log.level}}</td>
             <td>{{application_log.date_time}}</td>
             <td>{{application_log.source}}</td>
