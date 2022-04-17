@@ -40,12 +40,16 @@ def create():
 
 ''' SEARCH SINGLE ELEMENT'''
 
-@app.route('/data/<int:id>') # SOLO SEARCH
-def RetrieveLog(id):
-    application_log = Events_model.query.filter_by(id=id).first()
-    if application_log:
-        return render_template('data.html', application_log = application_log)
-    return f"error with id ={id} Doesn't exist"
+@app.route('/search', methods = ['POST']) # SOLO SEARCH
+def RetrieveLog():
+    if request.method == "POST":
+        id = request.form.get('id') 
+        
+        application_logs = Events_model.query.filter_by(id=id)
+        if application_logs:
+            return render_template('index.html', application_logs=application_logs)
+
+    return render_template('index.html', application_logs=[])
  
 
 
@@ -54,12 +58,12 @@ def RetrieveLog(id):
 @app.route('/data/<int:id>/update',methods = ['GET','POST'])
 def update(id):
     application_log = Events_model.query.filter_by(id=id).first()
-    print(application_log)
     if request.method == 'POST':
+        print(request.form)
         if application_log:
             application_log.level = request.form['level']
-            date_time = request.form['date_time']
-            application_log.date_time = datetime.strptime(date_time, "%d/%m/%Y %H:%M:%S")
+            date_time = request.form['date_time']              
+            application_log.date_time = datetime.strptime(date_time, "%Y-%m-%dT%H:%M")
             application_log.source = request.form['source']
             application_log.event_id = request.form['event_id']
 
@@ -74,11 +78,12 @@ def update(id):
 @app.route('/data/<int:id>/delete', methods=['GET','POST'])
 def delete(id):
     application_log = Events_model.query.filter_by(id=id).first()
-    if request.method == 'POST':
+    if request.method == 'GET':
         if application_log:
             db.session.delete(application_log)
             db.session.commit()
             return redirect('/')
+    return redirect('/')
 
 
 @app.route('/')
