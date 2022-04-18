@@ -17,7 +17,7 @@
           <option  type = "text" name = "level" value="Warning">Warning</option>
           <option  type = "text" name = "level" value="Critical">Critical</option>
       </select>
-      <div id="emailHelp" class="form-text">We'll never share your email with anyone else.</div>
+      <div id="emailHelp" class="form-text">Select proper attributes for the custom event log.</div>
     </div>
 
     <div class="mb-3">
@@ -36,15 +36,15 @@
         <option type = "text" name="source" value="Application">Application</option>
         <option type = "text" name="source" value="Audit">Audit</option>
       </select>
-      <div id="source" class="form-text">We'll never share your email with anyone else.</div>
+      <div id="source" class="form-text"></div>
     </div>
 
     <div class="mb-3">
       <!-- <input type="checkbox" class="form-check-input" id="exampleCheck1"> -->
-      <label for="event_id" class="form-label">Event id</label>
+      <label for="event_id" class="form-label">Event ID</label>
       <input type="number" id="event_id" name="event_id"
        min="0" max="1000000">
-      
+      <div  id="emailHelp" class="form-text"><a href="https://docs.microsoft.com/en-us/windows/security/threat-protection/windows-defender-application-control/event-id-explanations"> See documentation on IDs</a></div>
     </div>
 
     <button type="submit" class="btn btn-primary">Submit</button>

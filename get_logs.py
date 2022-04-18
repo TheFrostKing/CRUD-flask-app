@@ -41,7 +41,7 @@ evt_dict={win32con.EVENTLOG_AUDIT_FAILURE:'EVENTLOG_AUDIT_FAILURE',  # storing a
             win32con.EVENTLOG_WARNING_TYPE:'EVENTLOG_WARNING_TYPE',
             win32con.EVENTLOG_ERROR_TYPE:'EVENTLOG_ERROR_TYPE'}
 
-error_types_to_filter = [win32con.EVENTLOG_AUDIT_FAILURE, win32con.EVENTLOG_ERROR_TYPE] # filter by critical and error levels
+error_types_to_filter = [win32con.EVENTLOG_WARNING_TYPE, win32con.EVENTLOG_ERROR_TYPE] # filter by critical and error levels
 
 
 number_of_hours_to_look_back = 24
@@ -50,14 +50,14 @@ datetime_back = datetime.datetime.now() - datetime.timedelta(hours=number_of_hou
 
 while True:
     server = 'localhost' # name of the target computer to get event logs
-    log_types = ["Application"]
+    log_types = ["Application", "Security"]
     for log_type in log_types:
         handle = win32evtlog.OpenEventLog(server,log_type)
         flags = win32evtlog.EVENTLOG_BACKWARDS_READ|win32evtlog.EVENTLOG_SEQUENTIAL_READ
         total = win32evtlog.GetNumberOfEventLogRecords(handle)
 
         count_logs = 0
-        gathered_events = []
+
         while True:
             events = win32evtlog.ReadEventLog(handle, flags,0)
             if events:

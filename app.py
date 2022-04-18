@@ -91,6 +91,9 @@ def home():
     application_logs = Events_model.query.all()
     return render_template('index.html', application_logs=application_logs)
 
+@app.route('/about')
+def about():
+    return render_template('about.html')
 
  
  

@@ -2,8 +2,8 @@
 {% block title %}Index{% endblock %}
 
 {% block content %}
-<div class="container">
-    <h2> This is our Manager for Event logs on the Active Directory</h2>
+<div class="container" style="text-align: center;width: 100%;">
+    <h2> This is our Manager for Event logs</h2>
 </div>
 
 <div class = "container">
@@ -25,11 +25,12 @@
         
           <tr>
             <th scope="row">{{application_log.id}}</th>
-            <td><a href='https://127.0.0.1:5000/data/{{application_log.id}}/update'>{{application_log.level}}</a></td>
+            <td><a href='/data/{{application_log.id}}/update'>{{application_log.level}}</a></td>
             <td>{{application_log.date_time}}</td>
             <td>{{application_log.source}}</td>
             <td>{{application_log.event_id}}</td>
-            <td><a href='https://127.0.0.1:5000/data/{{application_log.id}}/delete' type="button" class="btn btn-danger">Delete</a></td>
+            <td><a href='/data/{{application_log.id}}/delete' onclick="return confirm('Are you sure you want to delete this item?');" type="button" class="btn btn-danger">Delete</a></td>
+
           </tr>
         </a>
           {% endfor %}
