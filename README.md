@@ -7,6 +7,6 @@ The database gets thanks to a script that takes the logs from the Windows Event 
 Connection happens over HTTPS with self-signed certificates
 
 # Libraries used
-pywin32
-SqlAlchemy
-openssl
+>pywin32 <br>
+>SqlAlchemy <br>
+>openssl
