@@ -12,4 +12,4 @@ Connection happens over HTTPS with self-signed certificates
 >openssl
 
 # Overview
-![Blank diagram(4)](https://user-images.githubusercontent.com/37861327/164087538-efebb29e-d3ce-4286-8356-f1b9fa67780e.png)
+![flask scheme](https://user-images.githubusercontent.com/37861327/164088467-0ccaf220-7fde-4fcb-8b79-e5e5fe333228.png)
