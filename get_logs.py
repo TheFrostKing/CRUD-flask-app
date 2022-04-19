@@ -44,7 +44,7 @@ evt_dict={win32con.EVENTLOG_AUDIT_FAILURE:'EVENTLOG_AUDIT_FAILURE',  # storing a
 error_types_to_filter = [win32con.EVENTLOG_WARNING_TYPE, win32con.EVENTLOG_ERROR_TYPE] # filter by critical and error levels
 
 
-number_of_hours_to_look_back = 24
+number_of_hours_to_look_back = 48
 datetime_back = datetime.datetime.now() - datetime.timedelta(hours=number_of_hours_to_look_back)
 
 
