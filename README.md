@@ -10,3 +10,4 @@ Connection happens over HTTPS with self-signed certificates
 >pywin32 <br>
 >SqlAlchemy <br>
 >openssl
+![Blank diagram(4)](https://user-images.githubusercontent.com/37861327/164087538-efebb29e-d3ce-4286-8356-f1b9fa67780e.png)
