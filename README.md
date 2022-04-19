@@ -12,7 +12,7 @@ Connection happens over HTTPS with self-signed certificates.
 >openssl
 
 # Sources I used and inspired me
->https://sejalrawat25.medium.com/creating-a-crud-application-with-flask-19c18ff128b5
+>https://sejalrawat25.medium.com/creating-a-crud-application-with-flask-19c18ff128b5 <br>
 >https://www.accadius.com/using-python-read-windows-event-logs-multiple-servers/
 
 # Overview
