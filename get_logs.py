@@ -28,10 +28,20 @@ c = conn.cursor()
 
 
 def insert_data(event):
-    c.execute(f'''INSERT INTO event_errors (level, date_time, source, event_id)
+    
+    check_data = c.execute(f''' Select date_time, event_id from event_errors WHERE date_time = '{event.TimeGenerated}'
+                            AND event_id = '{event.EventID}' ''')
+
+    entry = check_data.fetchone()
+   
+    if entry is None:
+        c.execute(f'''INSERT INTO event_errors (level, date_time, source, event_id)
                 VALUES ('{evt_type}', '{event.TimeGenerated}', '{event.SourceName}', '{event.EventID}' )''')
+        print("executing query")
+    else:
+        print("already in")
+
     conn.commit()   
-    print("executing query")
     
 
 
