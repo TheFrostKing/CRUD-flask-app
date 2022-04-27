@@ -1,6 +1,6 @@
 from flask import Flask,render_template,flash, redirect,url_for,session,logging,request
 from models import db, Events_model, User
-from datetime import datetime
+from datetime import datetime, timedelta
 from flask_login import UserMixin, login_user, LoginManager, login_required, logout_user, current_user
 from flask_wtf import FlaskForm
 from wtforms import StringField, PasswordField, SubmitField
@@ -17,15 +17,20 @@ app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///db.sqlite'
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 app.config['SECRET_KEY'] = 'ItShouldBeAnythingButSecret' 
 db.init_app(app)
-
-@app.before_first_request
-def create_table():
-    db.create_all()
-
 login_manager = LoginManager()
 login_manager.init_app(app)
 login_manager.login_view = 'login'
 login_manager.session_protection = "strong"
+login_manager.refresh_view = 'relogin'
+login_manager.needs_refresh_message = (u"Session timed out, please re-login")
+login_manager.needs_refresh_message_category = "info"
+
+@app.before_first_request
+def create_table():
+    db.create_all()
+    session.permanent = True
+    app.permanent_session_lifetime = timedelta(minutes=5)
+
 
 @login_manager.user_loader
 def load_user(user_id):
