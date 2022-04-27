@@ -3,7 +3,8 @@
 
 {% block content %}
 <div class="container" style="text-align: center;width: 100%;">
-    <h2> This is our Manager for Event logs</h2>
+    <h2> This is my manager for event logs</h2>
+     Hi {{ current_user.username }}!
 </div>
 
 <div class = "container">
@@ -22,7 +23,6 @@
             {% for application_log in application_logs %}
         <a href="#">
 
-        
           <tr>
             <th scope="row">{{application_log.id}}</th>
             <td><a href='/data/{{application_log.id}}/update'>{{application_log.level}}</a></td>

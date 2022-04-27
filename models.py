@@ -1,7 +1,17 @@
+from flask_login import UserMixin
 from flask_sqlalchemy import SQLAlchemy
 from datetime import datetime
+from sqlalchemy import TEXT, null
  
 db = SQLAlchemy()
+
+
+class User(db.Model, UserMixin):
+    __tablename__ = "user"
+    
+    id = db.Column(db.Integer, primary_key=True)
+    username = db.Column(db.String(80), unique=True, nullable=False)
+    password = db.Column(db.String(300), nullable=False, unique=True)
 
 class Events_model(db.Model):
     __tablename__ = 'event_errors'
