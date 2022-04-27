@@ -1,13 +1,10 @@
 from flask import Flask,render_template,flash, redirect,url_for,session,logging,request
 from models import db, Events_model, User
 from datetime import datetime, timedelta
-from flask_login import UserMixin, login_user, LoginManager, login_required, logout_user, current_user
-from flask_wtf import FlaskForm
-from wtforms import StringField, PasswordField, SubmitField
-from wtforms.validators import InputRequired, Length, ValidationError
+from flask_login import REFRESH_MESSAGE, UserMixin, login_user, LoginManager, login_required, logout_user, current_user
 from flask_bcrypt import Bcrypt
 
-
+from forms import RegisterForm, LoginForm
 
 # create an instance of the flask app
 app = Flask(__name__)
@@ -21,7 +18,7 @@ login_manager = LoginManager()
 login_manager.init_app(app)
 login_manager.login_view = 'login'
 login_manager.session_protection = "strong"
-login_manager.refresh_view = 'relogin'
+login_manager.refresh_view = 'login'
 login_manager.needs_refresh_message = (u"Session timed out, please re-login")
 login_manager.needs_refresh_message_category = "info"
 
@@ -29,47 +26,20 @@ login_manager.needs_refresh_message_category = "info"
 def create_table():
     db.create_all()
     session.permanent = True
-    app.permanent_session_lifetime = timedelta(minutes=5)
-
+    app.permanent_session_lifetime = timedelta(minutes=1) # time for inactivity
+    session.modified = True # refresh session of inactivity
 
 @login_manager.user_loader
 def load_user(user_id):
     return User.query.get(int(user_id))
     
 
-class RegisterForm(FlaskForm):
-    username = StringField(validators=[
-                           InputRequired(), Length(min=4, max=20)], render_kw={"placeholder": "Username"})
-
-    password = PasswordField(validators=[
-                             InputRequired(), Length(min=8, max=20)], render_kw={"placeholder": "Password"})
-
-    submit = SubmitField('Register')
-
-    def validate_username(self, username):
-        existing_user_username = User.query.filter_by(
-            username=username.data).first()
-        if existing_user_username:
-            raise ValidationError(
-                'That username already exists. Please choose a different one.')
-
-
-class LoginForm(FlaskForm):
-    username = StringField(validators=[
-                           InputRequired(), Length(min=4, max=20)], render_kw={"placeholder": "Username"})
-
-    password = PasswordField(validators=[
-                             InputRequired(), Length(min=8, max=20)], render_kw={"placeholder": "Password"})
-
-    submit = SubmitField('Login')
-
-
 
 @app.route('/register', methods = ['GET', 'POST'])
 def register():
     form = RegisterForm()
 
-    if form.validate_on_submit():
+    if request.method == 'POST' and form.validate_on_submit():
         hashed_password = bcrypt.generate_password_hash(form.password.data) #hashing the passwd
         new_user = User(username=form.username.data, password=hashed_password)
         db.session.add(new_user)
@@ -114,9 +84,9 @@ def create():
         application_log = Events_model(level=level, date_time=datetime_object, source=source, event_id=event_id)
         db.session.add(application_log)
         db.session.commit()
-        return redirect('/'), 200
+        return redirect('/')
 
-    return  'Failed to create', 401
+    return  'Failed to create'
             
 
 
