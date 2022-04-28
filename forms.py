@@ -5,6 +5,7 @@ from models import User
 from flask import  redirect,url_for
 from flask_admin import  AdminIndexView, expose
 from flask_admin.contrib.sqla import ModelView
+from flask_bcrypt import Bcrypt
 from flask_login import  login_required,  current_user
 class RegisterForm(FlaskForm):
     username = StringField(validators=[
@@ -39,17 +40,23 @@ class LoginForm(FlaskForm):
     submit = SubmitField('Login')
 
 
-class AdminView(ModelView):
-    def is_accessible(self):
-        if current_user.is_authenticated:
-            return True
-
-    def inaccessible_callback(self, name, **kwargs):
-        return redirect(url_for('login'))
 
 class MyHomeView(AdminIndexView):
     @login_required
     @expose('/')
     def index(self):
+        args = "you logged in successfully"
         return self.render('admin/index.html')
 
+
+class AdminView(ModelView):
+    def is_accessible(self):
+        if current_user.is_authenticated:
+            return True
+    #redirects to login page if not authenticated
+    def inaccessible_callback(self, name, **kwargs):
+        return redirect(url_for('login'))
+    #hashing the password on adding
+    def on_model_change(self, form, model, is_created):
+        model.password = bcrypt.generate_password_hash(model.password)
+       

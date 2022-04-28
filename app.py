@@ -2,12 +2,10 @@ import re
 from flask import Flask,render_template, redirect,url_for,session,request
 from models import db, Events_model, User
 from datetime import datetime, timedelta
-from flask_login import REFRESH_MESSAGE,  login_user, LoginManager, login_required, logout_user, current_user, user_unauthorized
+from flask_login import REFRESH_MESSAGE,  login_user, LoginManager, login_required, logout_user, current_user
 from flask_bcrypt import Bcrypt
-
+from flask_admin.contrib.sqla import ModelView
 from flask_admin import Admin, AdminIndexView, expose
-
-
 from forms import RegisterForm, LoginForm
 
 # create an instance of the flask app
@@ -41,10 +39,23 @@ def create_table():
 def load_user(user_id):
     return User.query.get(int(user_id))
 
+
+class AdminView(ModelView):
+    def is_accessible(self):
+        if current_user.is_authenticated:
+            return True
+    #redirects to login page if not authenticated
+    def inaccessible_callback(self, name, **kwargs):
+        return redirect(url_for('login'))
+    #hashing the password on adding
+    def on_model_change(self, form, model, is_created):
+        model.password = bcrypt.generate_password_hash(model.password)
+       
+
 ''' ADMIN VIEW '''
 from forms import AdminView, MyHomeView
 
-admin = Admin(app, index_view=MyHomeView())
+admin = Admin(app, index_view=MyHomeView(), template_mode='bootstrap4')
 admin.add_view(AdminView(User, db.session))
 
 
