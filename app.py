@@ -1,14 +1,20 @@
-from flask import Flask,render_template,flash, redirect,url_for,session,logging,request
+import re
+from flask import Flask,render_template, redirect,url_for,session,request
 from models import db, Events_model, User
 from datetime import datetime, timedelta
-from flask_login import REFRESH_MESSAGE, UserMixin, login_user, LoginManager, login_required, logout_user, current_user
+from flask_login import REFRESH_MESSAGE,  login_user, LoginManager, login_required, logout_user, current_user, user_unauthorized
 from flask_bcrypt import Bcrypt
+
+from flask_admin import Admin, AdminIndexView, expose
+
 
 from forms import RegisterForm, LoginForm
 
 # create an instance of the flask app
 app = Flask(__name__)
 bcrypt = Bcrypt(app)
+
+
 # database path
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///db.sqlite'
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
@@ -22,17 +28,25 @@ login_manager.refresh_view = 'login'
 login_manager.needs_refresh_message = (u"Session timed out, please re-login")
 login_manager.needs_refresh_message_category = "info"
 
+
+
 @app.before_first_request
 def create_table():
     db.create_all()
     session.permanent = True
-    app.permanent_session_lifetime = timedelta(minutes=1) # time for inactivity
+    app.permanent_session_lifetime = timedelta(minutes=5) # time for inactivity
     session.modified = True # refresh session of inactivity
-
+    
 @login_manager.user_loader
 def load_user(user_id):
     return User.query.get(int(user_id))
-    
+
+''' ADMIN VIEW '''
+from forms import AdminView, MyHomeView
+
+admin = Admin(app, index_view=MyHomeView())
+admin.add_view(AdminView(User, db.session))
+
 
 
 @app.route('/register', methods = ['GET', 'POST'])
@@ -56,14 +70,15 @@ def login():
         user = User.query.filter_by(username=form.username.data).first()
         if user:
             login_user(user)
-            return redirect(url_for('home'))
-    return render_template('login.html', form=form,  name = current_user)
+            return redirect(request.args.get("next") or url_for("home"))
+    return render_template('login.html', form=form)
 
 @app.route('/logout', methods=['GET', 'POST'])
 @login_required
 def logout():
     logout_user()
     return redirect(url_for('login'))
+    
 
 
 
