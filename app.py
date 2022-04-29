@@ -11,15 +11,15 @@ from forms import RegisterForm, LoginForm
 # create an instance of the flask app
 app = Flask(__name__)
 bcrypt = Bcrypt(app)
-
+login_manager = LoginManager()
+login_manager.init_app(app)
 
 # database path
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///db.sqlite'
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 app.config['SECRET_KEY'] = 'ItShouldBeAnythingButSecret' 
 db.init_app(app)
-login_manager = LoginManager()
-login_manager.init_app(app)
+
 login_manager.login_view = 'login'
 login_manager.session_protection = "strong"
 login_manager.refresh_view = 'login'
@@ -34,7 +34,7 @@ def create_table():
     session.permanent = True
     app.permanent_session_lifetime = timedelta(minutes=5) # time for inactivity
     session.modified = True # refresh session of inactivity
-    
+
 @login_manager.user_loader
 def load_user(user_id):
     return User.query.get(int(user_id))
@@ -53,7 +53,7 @@ class AdminView(ModelView):
        
 
 ''' ADMIN VIEW '''
-from forms import AdminView, MyHomeView
+from forms import MyHomeView
 
 admin = Admin(app, index_view=MyHomeView(), template_mode='bootstrap4')
 admin.add_view(AdminView(User, db.session))
