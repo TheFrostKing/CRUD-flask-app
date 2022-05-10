@@ -177,10 +177,14 @@ def delete(id):
 
 
 @app.route('/')
+@app.route('/home', methods=['GET','POST'])
 @login_required
 def home():
-    application_logs = Events_model.query.all()
+    page = request.args.get('page', type = int)
+    application_logs = Events_model.query.paginate(page = page, per_page = 5)
     return render_template('index.html', application_logs=application_logs, name = current_user), 200
+    r
+
 
 @app.route('/about',methods=['GET','POST'])
 def about():
