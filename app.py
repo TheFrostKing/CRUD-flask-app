@@ -7,12 +7,28 @@ from flask_bcrypt import Bcrypt
 from flask_admin.contrib.sqla import ModelView
 from flask_admin import Admin, AdminIndexView, expose
 from forms import RegisterForm, LoginForm
+from flask_talisman import Talisman
+
 
 # create an instance of the flask app
 app = Flask(__name__)
 bcrypt = Bcrypt(app)
 login_manager = LoginManager()
 login_manager.init_app(app)
+csp = {
+    'default-src': [
+        '\'self\'',
+        '\'unsafe-inline\'',
+        'stackpath.bootstrapcdn.com',
+        'https://source.unsplash.com/twukN12EN7c/1920x1080',
+        'https://images.unsplash.com',
+        'https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js',
+        "https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css",
+        'code.jquery.com',
+        'cdn.jsdelivr.net'
+    ]
+}
+talisman = Talisman(app, content_security_policy=csp)
 
 # database path
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///db.sqlite'
@@ -177,7 +193,7 @@ def delete(id):
 
 
 @app.route('/')
-@app.route('/home', methods=['GET','POST'])
+
 @login_required
 def home():
     page = request.args.get('page', type = int)
@@ -193,5 +209,5 @@ def about():
 
 
 if __name__ == "__main__":
-    # app.run(host="0.0.0.0", port=5000)
+    
     app.run(ssl_context=('self_signed/cert.pem', 'self_signed/key.pem'), host ="0.0.0.0", port=5000, debug = True)
