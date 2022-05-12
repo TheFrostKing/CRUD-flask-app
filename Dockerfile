@@ -1,7 +1,7 @@
 FROM python:3.10.0
 
-EXPOSE 5000
 EXPOSE 443
+
 
 WORKDIR /flask_crud
 
@@ -11,4 +11,6 @@ RUN pip3 install -r requirements.txt
 
 COPY . /flask_crud
 
-CMD [ "python3",  "app.py","-host=0.0.0.0"] 
+
+CMD [ "gunicorn", "--certfile", "self_signed/cert.pem", "--keyfile", "self_signed/key.pem", "-b", ":443", "app:app" ]
+ 
