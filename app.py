@@ -209,5 +209,5 @@ def about():
 
 
 if __name__ == "__main__":
-    
+    # app.run(host="0.0.0.0", port=5000)
     app.run(ssl_context=('self_signed/cert.pem', 'self_signed/key.pem'), host ="0.0.0.0", port=443, debug = True)
