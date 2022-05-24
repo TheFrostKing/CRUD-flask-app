@@ -17,7 +17,7 @@ The application is ready to be ran with docker. You either build the image yours
 Another way of running the app is to just use the Flask WSGI, by simply running it with  `flask run --cert self_signed/cert.pem --key self_signed/key.pem -h 0.0.0.0`
 
 # Security concerns
-The application provides login functionality using `Flask-logins`. All the passwords are hashed and salted in the database. The scenario which I developed it uses `Flask-Admin`, an alternative Flask  to phpMyAdmin, because users are meant to be SysOps and they are supposed to recieve company accounts not create their own. Although, I left a registration form, which could be returned or removed at any time. <br>
+The application provides login functionality using `Flask-logins`. All the passwords are hashed and salted in the database. The scenario which I developed it uses `Flask-Admin` (it can be found on https://<your_ip:443>/admin>), an alternative Flask  to phpMyAdmin, because users are meant to be SysOps and they are supposed to recieve company accounts not create their own. Although, I left a registration form, which could be returned or removed at any time. <br>
 Furthermore, I decided to generate my own self-signed certificates so the application is running with already predefined ones, users have to add them to their browser. The connection happens under HTTP.<br>
 In addition, `Flask-Talisman` is used to forces all connects to https and it is important to update the list in the beggining of the code if any external resources are used, in the HTML for e.g. 
 
