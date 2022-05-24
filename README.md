@@ -38,5 +38,5 @@ In addition, `Flask-Talisman` is used to forces all connects to https and it is 
 ![flask scheme](https://user-images.githubusercontent.com/37861327/164088467-0ccaf220-7fde-4fcb-8b79-e5e5fe333228.png)
  ![image](https://user-images.githubusercontent.com/37861327/170061660-40efdd0a-9f1e-4e1d-83b6-fa1253eeed06.png)
 ![image](https://user-images.githubusercontent.com/37861327/170062099-044ed539-2641-4ee1-97cd-341b48505044.png)
-![image](https://user-images.githubusercontent.com/37861327/170062281-3e57068d-05e9-42a2-a34d-d14ad7d60232.png)
+![image](https://user-images.githubusercontent.com/37861327/170062552-dd9f10e3-8f43-4876-ad3d-fd6d1754de6b.png)
 
