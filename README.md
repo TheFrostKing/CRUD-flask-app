@@ -25,10 +25,9 @@ Furthermore, I decided to generate my own self-signed certificates so the applic
 In addition, `Flask-Talisman` is used to forces all connects to https and it is important to update the list in the beggining of the code if any external resources are used, in the HTML for e.g. 
 
 
-# Libraries and frameworks.
->pywin32 <br>
->SqlAlchemy<br>
+# Main frameworks and libraries.
 >Flask<br>
+>pywin32 <br>
 >flask_sqlchemy<br>
 >Flask_Login<br>
 >Flask-Admin<br>
