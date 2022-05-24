@@ -1,5 +1,8 @@
 # CRUD project 
- CRUD web application using the FLASK framework. 
+ CRUD web application using the FLASK framework. Screenshots can be found at the end.
+
+
+
 
 # What it does?
 The purpose of this project is to monitor event logs from different Windows Servers either remotely or locally. The file `get_logs.py` is a script which filters windows event logs and sends them to a database where a Flask application has CRUD functionality on the database:
@@ -33,3 +36,7 @@ In addition, `Flask-Talisman` is used to forces all connects to https and it is 
 
 # Overview
 ![flask scheme](https://user-images.githubusercontent.com/37861327/164088467-0ccaf220-7fde-4fcb-8b79-e5e5fe333228.png)
+ ![image](https://user-images.githubusercontent.com/37861327/170061660-40efdd0a-9f1e-4e1d-83b6-fa1253eeed06.png)
+![image](https://user-images.githubusercontent.com/37861327/170062099-044ed539-2641-4ee1-97cd-341b48505044.png)
+![image](https://user-images.githubusercontent.com/37861327/170062281-3e57068d-05e9-42a2-a34d-d14ad7d60232.png)
+
