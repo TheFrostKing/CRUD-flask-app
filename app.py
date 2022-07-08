@@ -1,3 +1,4 @@
+from ast import Raise
 import re
 from flask import Flask,render_template, redirect,url_for,session,request
 from models import db, Events_model, User
@@ -8,7 +9,6 @@ from flask_admin.contrib.sqla import ModelView
 from flask_admin import Admin, AdminIndexView, expose
 from forms import RegisterForm, LoginForm
 from flask_talisman import Talisman
-
 
 # create an instance of the flask app
 app = Flask(__name__)
@@ -76,18 +76,20 @@ admin.add_view(AdminView(User, db.session))
 
 
 
-@app.route('/register', methods = ['GET', 'POST'])
-def register():
-    form = RegisterForm()
+# @app.route('/register', methods = ['GET', 'POST'])
+# def register():
+#     form = RegisterForm()
 
-    if request.method == 'POST' and form.validate_on_submit():
-        hashed_password = bcrypt.generate_password_hash(form.password.data) #hashing the passwd
-        new_user = User(username=form.username.data, password=hashed_password)
-        db.session.add(new_user)
-        db.session.commit(), 200
-        return redirect(url_for('login'))
-
-    return render_template('register.html', form=form)
+#     if request.method == 'POST' and form.is_submitted():
+#         try:
+#             password_hash = generate_password_hash(form.password.data)
+#             new_user = User(username=form.username.data, password=password_hash)
+#             db.session.add(new_user)
+#             db.session.commit(), 200
+#             return redirect(url_for('login'))
+#         except:
+            
+#             return render_template('register.html', form=form)
 
 
 @app.route('/login', methods=['GET', 'POST'])
@@ -96,8 +98,12 @@ def login():
     if form.validate_on_submit():
         user = User.query.filter_by(username=form.username.data).first()
         if user:
-            login_user(user)
-            return redirect(request.args.get("next") or url_for("home"))
+            print(user.password)
+            print(form.password.data)
+            print(bcrypt.check_password_hash(user.password, form.password.data))
+            if bcrypt.check_password_hash(user.password, form.password.data):
+                login_user(user)
+                return redirect(request.args.get("next") or url_for("home"))
     return render_template('login.html', form=form)
 
 @app.route('/logout', methods=['GET', 'POST'])
